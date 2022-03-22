@@ -33,13 +33,14 @@ class LoggingServer(socketserver.ThreadingTCPServer):
 
     def start(self):
         self.server_thread = threading.Thread(target=self.serve_until_stopped)
+        self.server_thread.start()
         self.logger.info("About starting LoggingServer...")
 
     def shutdown(self,timeout:float=0.0):
         self.__shutdown.value = True
         self.server_thread.join(timeout)
         self.logger.info("Shutdown Logging Server.")
-        
+
 
 
 
