@@ -17,6 +17,7 @@ class LoggingServer(socketserver.ThreadingTCPServer):
         self.abort = 0
         self.timeout = 1
         self.logname = None
+        self.logger = logging.getLogger()
     
     def serve_until_stopped(self,shutdown):
         import select
