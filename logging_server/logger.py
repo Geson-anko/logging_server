@@ -80,7 +80,8 @@ class SocketLogger:
     def critical(self,*args, **kwds) -> None: self.logger.critical(*args, **kwds)
     @_check_pid
     def exception(self,*args, **kwds) -> None: self.logger.exception(*args, **kwds)
-    
+    @_check_pid
+    def log(self, *args,**kwds) -> None: self.logger.log(*args,**kwds)
 
 
 
