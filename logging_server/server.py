@@ -2,7 +2,10 @@ from .handlers import LogRecordStreamHandler
 import socketserver
 import logging
 import logging.handlers
-
+from dataclasses import dataclass
+@dataclass
+class Shutdown:
+    value:bool = False
 class LoggingServer(socketserver.ThreadingTCPServer):
     """The SocketServer which receive Logs."""
 
