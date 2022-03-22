@@ -2,8 +2,11 @@ from .handlers import LogRecordStreamHandler
 import socketserver
 import logging
 import logging.handlers
+from dataclasses import dataclass
 import threading
-
+@dataclass
+class Shutdown:
+    value:bool = False
 class LoggingServer(socketserver.ThreadingTCPServer):
     """The SocketServer which receive Logs."""
 
@@ -16,33 +19,29 @@ class LoggingServer(socketserver.ThreadingTCPServer):
         self.timeout = 1
         self.logname = None
         self.logger = logging.getLogger()
-        self.__shutdown = False
+        self.__shutdown = Shutdown(False)
         self.server_thread:threading.Thread = None
 
     def serve_until_stopped(self):
         import select
         abort = 0
-        while not abort and not self.__shutdown:
+        while not abort and not self.__shutdown.value:
             rd, wr, ex = select.select([self.socket.fileno()], [], [], self.timeout)
             if rd:
                 self.handle_request()
             abort = self.abort
 
     def start(self):
-        self.__shutdown= False
-        self.server_thread = threading.Thread(target=self.serve_until_stopped,daemon=True)
+        self.server_thread = threading.Thread(target=self.serve_until_stopped)
         self.server_thread.start()
         self.logger.info("About starting LoggingServer...")
 
     def shutdown(self,timeout:float=0.0):
-        self.__shutdown = True
+        self.__shutdown.value = True
         self.server_thread.join(timeout)
         self.logger.info("Shutdown Logging Server.")
 
-    def __del__(self):
-        self.shutdown()
-        
-        
+
 
 
         
