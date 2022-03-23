@@ -47,6 +47,9 @@ class SocketLogger:
     def logger(self):
         return self.__logger
 
+    def setLevel(self, level:int) -> None:
+        self.logger.setLevel(level)
+
     def set_logger(self):
         """set logger class, name, level and socket handler."""
         self.__logger = logging.getLogger(self.name)
