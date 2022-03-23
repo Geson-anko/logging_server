@@ -1,5 +1,5 @@
 """Logging Server for multiprocessing logging managements.
-Usage:
+Basic usage:
     >>> import logging, sys
     >>> ls = LoggingServer()
     >>> sh = logging.StreamHandler(sys.stdout)
@@ -10,6 +10,7 @@ Usage:
     >>> # end process
     >>> # Server thread is deamon, so you don't need call `ls.shutdown()`
     >>> ls.shutdown() # If you need. `del ls` is same.
+
 """
 
 from .handlers import LogRecordStreamHandler
