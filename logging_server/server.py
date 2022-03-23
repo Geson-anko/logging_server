@@ -11,6 +11,8 @@ Basic usage:
     >>> # Server thread is deamon, so you don't need call `ls.shutdown()`
     >>> ls.shutdown() # If you need. `del ls` is same.
 
+    You can use any server address
+    >>> ls = LoggingServer(host="127.0.0.1", port=9999)
 """
 
 from .handlers import LogRecordStreamHandler
