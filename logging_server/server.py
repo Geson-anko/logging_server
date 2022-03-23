@@ -1,3 +1,17 @@
+"""Logging Server for multiprocessing logging managements.
+Usage:
+    >>> import logging, sys
+    >>> ls = LoggingServer()
+    >>> sh = logging.StreamHandler(sys.stdout)
+    >>> ls.logger.addHandler(sh)
+    >>> ls.start() # run server in other thread.
+    >>> # your process
+    ... 
+    >>> # end process
+    >>> # Server thread is deamon, so you don't need call `ls.shutdown()`
+    >>> ls.shutdown() # If you need. `del ls` is same.
+"""
+
 from .handlers import LogRecordStreamHandler
 import socketserver
 import logging
