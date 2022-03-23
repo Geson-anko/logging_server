@@ -33,7 +33,7 @@ class SocketLogger:
     __pid:int = None
     __logger:logging.Logger = None
     def __init__(
-        self, name:str, level:logging.NOTSET, host="localhost",
+        self, name:str, level:int=logging.NOTSET, host="localhost",
         port:int=logging.handlers.DEFAULT_TCP_LOGGING_PORT,
     ) -> None:
         self.__pid = os.getpid()
