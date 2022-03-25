@@ -50,7 +50,7 @@ class LoggingServer(socketserver.ThreadingTCPServer):
         self.__shutdown= False
         self.server_thread = threading.Thread(target=self.serve_until_stopped,daemon=True)
         self.server_thread.start()
-        self.logger.info("About starting LoggingServer...")
+        self.logger.info("About starting Logging Server...")
 
     def shutdown(self,timeout:float=0.0):
         self.__shutdown = True
