@@ -14,13 +14,22 @@ def test_start():
 
 
 def test_delete_shutdown():
-    global ls
+    ls = LoggingServer(port=12345)
     ls.start()
     time.sleep(0.5)
     del ls
 
 def test_auto_shutdown():
-    ls = LoggingServer(port=12345)
     ls.start()
     time.sleep(0.5)
+
+def test_set_logger_modifier():
+    global ls
+    def modifier(logger):
+        return logger
+
+    ls.set_logger_modifier(modifier)
+    assert ls.logger_modifier == modifier
+    
+
 
