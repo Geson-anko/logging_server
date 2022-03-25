@@ -14,7 +14,7 @@ def test_version():
 def test_logger_modifier():
     def modifier(logger:logging.Logger) -> logging.Logger:
         sh = logging.StreamHandler(sys.stdout)
-        fmt = logging.Formatter("|||%(name)s|%(message)s|||")
+        fmt = logging.Formatter("test_logging_modifier() -> %(name)s|%(message)s")
         sh.setFormatter(fmt)
         logger.addHandler(sh)
         logger.setLevel(0)
