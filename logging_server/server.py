@@ -25,7 +25,7 @@ class LoggingServer(socketserver.ThreadingTCPServer):
     """The SocketServer which receive Logs."""
 
     allow_reuse_address = True
-    logger_modifier:Callable = lambda x:x
+    logger_modifier:Callable = lambda self,x:x
 
     def __init__(self,host='localhost',port=logging.handlers.DEFAULT_TCP_LOGGING_PORT, 
                 handler=LogRecordStreamHandler):
