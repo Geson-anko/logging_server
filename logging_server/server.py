@@ -28,11 +28,11 @@ class LoggingServer(socketserver.ThreadingTCPServer):
     logger_modifier:Callable = lambda self,x:x
 
     def __init__(self,host='localhost',port=logging.handlers.DEFAULT_TCP_LOGGING_PORT, 
-                handler=LogRecordStreamHandler):
+                handler=LogRecordStreamHandler, logger_name:str=__name__):
         super().__init__((host, port), handler)
         self.timeout = 1
         self.logname = None
-        self.logger = logging.getLogger()
+        self.logger = logging.getLogger(logger_name)
         self.__shutdown = False
         self.server_thread:threading.Thread = None
 
