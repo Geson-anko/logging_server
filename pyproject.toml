@@ -1,9 +1,19 @@
 [tool.poetry]
 name = "logging_server"
 version = "0.1.0"
-description = ""
-authors = ["Geson-anko <59220704+Geson-anko@users.noreply.github.com>"]
-
+repository="https://github.com/Geson-anko/logging_server"
+description = "The logging tool for python multiprocessing."
+authors = ["Yasuhiro Shimomura <22shimoyasu22@gmail.com>"]
+readme = "README.md"
+license = "MIT"
+classifiers=[
+	"Programming Language :: Python :: 3",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
+	"Intended Audience :: Developers",
+	"Programming Language :: Python",
+	"Topic :: Software Development :: Libraries :: Python Modules"
+]
 [tool.poetry.dependencies]
 python = "^3.9"
 
