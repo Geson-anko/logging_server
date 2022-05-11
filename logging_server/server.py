@@ -43,6 +43,8 @@ class LoggingServer(socketserver.ThreadingTCPServer):
             if rd:
                 self.handle_request()
 
+        self.logger.info("Logging Server stopped.")
+
     def start(self):
         self.__shutdown= False
         self.server_thread = threading.Thread(target=self.serve_until_stopped,daemon=True)
@@ -51,12 +53,8 @@ class LoggingServer(socketserver.ThreadingTCPServer):
 
     def shutdown(self,timeout:float=0.0):
         self.__shutdown = True
-        self.server_thread.join(timeout)
         self.logger.info("Shutdown Logging Server.")
 
-    def __del__(self):
-        self.shutdown()
-        
     def set_logger_modifier(self, func:Callable) -> None:
         """set func to add handlers or filters to specified logger.
         The func must have a argument for logger, and returns logger class.
