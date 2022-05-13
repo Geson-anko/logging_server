@@ -5,10 +5,11 @@ import sys
 import logging
 import time
 
-#root = logging.getLogger()
-#sh = logging.StreamHandler(sys.stdout)
-#root.addHandler(sh)
-#root.setLevel(0)
+root = logging.getLogger()
+sh = logging.StreamHandler(sys.stdout)
+root.addHandler(sh)
+root.setLevel(0)
+
 PORT = 10002
 NUM_PROCESSES = 3
 def process_func(num:int) -> None:
