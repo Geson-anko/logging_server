@@ -34,7 +34,7 @@ class LoggingServer(socketserver.ThreadingTCPServer):
         self.timeout = 1
         self.logname = None
         self.logger = logging.getLogger(logger_name)
-        self.__shutdown = False
+        self.__shutdown = True
         self.server_thread:threading.Thread = None
 
     def serve_until_stopped(self):
