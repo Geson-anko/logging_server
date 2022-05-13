@@ -56,6 +56,10 @@ class LoggingServer(socketserver.ThreadingTCPServer):
         self.__shutdown = True
         self.logger.info("Shutdown Logging Server...")
 
+    @property
+    def is_shutdown(self) -> bool:
+        return self.__shutdown
+
     def set_logger_modifier(self, func:Callable) -> None:
         """set func to add handlers or filters to specified logger.
         The func must have a argument for logger, and returns logger class.
