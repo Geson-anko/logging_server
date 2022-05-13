@@ -7,9 +7,6 @@ from typing import *
 class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     """Read the LogRecord binary and process it."""
 
-    # logger saver
-    loggers = dict()
-
     def handle(self):
         """make the LogRecord object from binary and process it."""
         while True:
@@ -29,17 +26,5 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     
     def handleLogRecord(self, record:logging.LogRecord) -> None:
         """ process the LogRecord object."""
-        if self.server.logname is not None:
-            name = self.server.logname
-        else:
-            name = record.name
-
-        # if already exists the logger, use it.
-        if name in self.loggers:
-            logger = self.loggers[name]
-        else:
-            logger = logging.getLogger(name)
-            logger.propagate = True
-            
-            self.loggers[name] = logger
+        logger = logging.getLogger()
         logger.handle(record)
