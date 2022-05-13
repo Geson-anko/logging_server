@@ -3,10 +3,10 @@ import logging
 import sys
 import time
 ls = LoggingServer(port=8316)
-def test_start():
-    ls.start()
-    time.sleep(0.01)
-    ls.shutdown()
+def test_init():
+    assert ls.is_shutdown == True
+    assert ls.timeout == 1
+    assert ls.logname is None
 
 def test_set_logger_modifier():
     global ls
