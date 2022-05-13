@@ -12,7 +12,6 @@ def test_start():
     time.sleep(0.5)
     ls.shutdown()
 
-
 def test_delete_shutdown():
     ls = LoggingServer(port=12345)
     ls.start()
@@ -32,4 +31,10 @@ def test_set_logger_modifier():
     assert ls.logger_modifier == modifier
     
 
+def test_is_shutdown():
+    ls.start()
+    assert ls.is_shutdown == False
+
+    ls.shutdown()
+    assert ls.is_shutdown == True
 
