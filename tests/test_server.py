@@ -8,15 +8,6 @@ def test_init():
     assert ls.timeout == 1
     assert ls.logname is None
 
-def test_set_logger_modifier():
-    global ls
-    def modifier(logger):
-        return logger
-
-    ls.set_logger_modifier(modifier)
-    assert ls.logger_modifier == modifier
-    
-
 def test_is_shutdown():
     ls.start()
     assert ls.is_shutdown == False
