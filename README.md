@@ -1,11 +1,17 @@
 # Logging Server
 Logging tool for python multiprocessing.
 # Installation
-Please clone this repository and run a following command.
+Please run a following command.
+```shell
+pip install git+https://github.com/Geson-anko/logging_server.git@main
+```
+
+Or, clone this repository and run a following command.
 
 ```shell
 pip install -e ./
 ```
+
 
 # Examples
 ### Good
@@ -20,7 +26,7 @@ def process(process_name:str) -> None:
 
 if __name__ == "__main__":
     import multiprocessing as mp
-    
+
     logger = logging.getLogger() # root logger
     logger.addHandler(logging.StreamHandler(sys.stdout)) # output to console.
     logger.setLevel(logging.NOTSET) # lowest logger level
@@ -45,7 +51,7 @@ def process(process_name:str) -> None:
 
 if __name__ == "__main__":
     import multiprocessing as mp
-    
+
     logger = logging.getLogger() # root logger
     logger.addHandler(logging.StreamHandler(sys.stdout)) # output to console.
     logger.setLevel(logging.NOTSET) # lowest logger level
@@ -69,10 +75,10 @@ The logging server must be protected with `if __name__ == "__main__":`
 ```py
 if __name__ == "__main__":
     ls = LoggingServer(host="localhost", port=9999)
-    ls.start() # Server runs in daemon thread. 
+    ls.start() # Server runs in daemon thread.
 ```
 
-- Shutdown server    
+- Shutdown server  
 You don't need to call this method at the end of the script because logging server runs in daemon thread.
 ```py
 ...
@@ -80,9 +86,19 @@ ls.shutdown()
 ...
 ```
 
+- with statement
+```py
+with LoggingServer(): # calling start()
+    ...
+# calling shutdown()
+```
+
 - Socket Logger  
-It is an incomplete `logging.Logger` wrapper that does not inherit.  
-SocketLogger provides some methods to send logs to server.
+It is an incomplete `logging.Logger` wrapper that does not inherit.
+SocketLogger provides some methods to send logs to server.  
+The logging methods (such as `logger.debug`) are decorated by `_pid_checker`, because `multiprocessing` causes the logger to be dereferenced and must be reset. So This logger calls `reset_logger` if the pid is changed.
+
+
 ```py
 # host and port are the same as server.
 logger = SocketLogger("SocketLogger",host="localhost",port=9999)
@@ -93,26 +109,23 @@ logger.error("error")
 logger.critical("critical")
 ```
 
-- Logger modifier
-The Logging Server gets the logger in the thread when the Log is sent. (In fact, RogRecordStreamHandler does it.)
-Then, a function can be set up to make modifications to the logger.
-
-```py
-import logging
-
-def modifier(logger:logging.Logger) -> logging.Logger:
-    fh = logging.FileHandler(logger.name+".log")
-    logger.addHandler(fh)
-    return logger
-
-if __name__ == "__main__":
-    ls = LoggingServer()
-    ls.set_logger_modifier(modifier)
-    ls.start()
-```
-
-
-
-
-
-
+# Logging Structure
+                     ┌───────────┐
+                     │Root Logger│
+                     └───────────┘
+                           ▲
+                           │
+                           │
+                       Propagate
+                           │
+        ┌──────────────────┴──────────────────┐
+        │Logging Server (Threading TCP Server)│
+        └─────────────────────────────────────┘
+           ▲               ▲               ▲
+           │               │               │
+           │               │               │
+         Send            Send            Send
+           │               │               │
+    ┌──────┴──────┐ ┌──────┴──────┐ ┌──────┴──────┐
+    │Socket Logger│ │Socket Logger│ │Socket Logger│
+    └─────────────┘ └─────────────┘ └─────────────┘

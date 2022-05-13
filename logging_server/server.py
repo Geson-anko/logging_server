@@ -25,15 +25,15 @@ class LoggingServer(socketserver.ThreadingTCPServer):
     """The SocketServer which receive Logs."""
 
     allow_reuse_address = True
-    logger_modifier:Callable = lambda self,x:x
+    daemon_threads = True
 
     def __init__(self,host='localhost',port=logging.handlers.DEFAULT_TCP_LOGGING_PORT, 
                 handler=LogRecordStreamHandler, logger_name:str=__name__):
         super().__init__((host, port), handler)
         self.timeout = 1
-        self.logname = None
+        self.logname = logger_name
         self.logger = logging.getLogger(logger_name)
-        self.__shutdown = False
+        self.__shutdown = True
         self.server_thread:threading.Thread = None
 
     def serve_until_stopped(self):
@@ -43,29 +43,32 @@ class LoggingServer(socketserver.ThreadingTCPServer):
             if rd:
                 self.handle_request()
 
+        self.logger.info("Logging Server stopped.")
+
     def start(self):
+        """Starts serve_until_stopped roop as a daemon thread."""
         self.__shutdown= False
         self.server_thread = threading.Thread(target=self.serve_until_stopped,daemon=True)
         self.server_thread.start()
         self.logger.info("About starting Logging Server...")
 
-    def shutdown(self,timeout:float=0.0):
+    def shutdown(self):
+        """Stops serve_until_stopped roop."""
         self.__shutdown = True
-        self.server_thread.join(timeout)
-        self.logger.info("Shutdown Logging Server.")
+        self.logger.info("Shutdown Logging Server...")
 
-    def __del__(self):
+    @property
+    def is_shutdown(self) -> bool:
+        return self.__shutdown
+        
+    def __enter__(self):
+        """Starts server."""
+        self.start()
+
+    def __exit__(self, exc_type,exc_val,exc_tb) -> None:
+        """Shutdown server"""   
         self.shutdown()
-        
-    def set_logger_modifier(self, func:Callable) -> None:
-        """set func to add handlers or filters to specified logger.
-        The func must have a argument for logger, and returns logger class.
-        """
-        if callable(func):
-            self.logger_modifier = func
-        else:
-            raise ValueError("logger modifier must be callable! input: {}".format(func))
-        
+                
 
 
         

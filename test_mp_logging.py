@@ -4,23 +4,23 @@ import multiprocessing as mp
 import sys
 import logging
 import time
-from logging import _lock
 
-outer_logger = SocketLogger("outer_logger")
+PORT = 10005
+outer_logger = SocketLogger("outer_logger",port=PORT)
 
 def process_func(num:int) -> None:
     outer_logger.info("Logging after process")
-    logger = SocketLogger(f"process{num}")
+    logger = SocketLogger(f"process{num}",port=PORT)
     logger.info(f"logged from process{num}")
 
 def test_multiprocessing_logging():
-    ls = LoggingServer()
+    ls = LoggingServer(port=PORT)
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(0)
-    ls.logger.addHandler(sh)
-    ls.logger.setLevel(0)
+    logger = logging.getLogger()
+    logger.addHandler(sh)
+    logger.setLevel(0)
     ls.start()
-    #outer_logger = SocketLogger("outer_logger",0)
     outer_logger.info("start test.")
     time.sleep(0.5)
     with mp.Pool() as p:
@@ -28,7 +28,7 @@ def test_multiprocessing_logging():
         p.map(process_func, nums)
 
     outer_logger.info("end test.")
-    #ls.shutdown()
+    ls.shutdown()
         
 
 if __name__ == "__main__":

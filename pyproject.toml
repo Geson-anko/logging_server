@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "logging_server"
-version = "0.1.0"
+version = "1.0.0"
 repository="https://github.com/Geson-anko/logging_server"
 description = "The logging tool for python multiprocessing."
 authors = ["Yasuhiro Shimomura <22shimoyasu22@gmail.com>"]
