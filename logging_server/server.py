@@ -31,7 +31,7 @@ class LoggingServer(socketserver.ThreadingTCPServer):
                 handler=LogRecordStreamHandler, logger_name:str=__name__):
         super().__init__((host, port), handler)
         self.timeout = 1
-        self.logname = None
+        self.logname = logger_name
         self.logger = logging.getLogger(logger_name)
         self.__shutdown = True
         self.server_thread:threading.Thread = None
