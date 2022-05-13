@@ -47,12 +47,14 @@ class LoggingServer(socketserver.ThreadingTCPServer):
         self.logger.info("Logging Server stopped.")
 
     def start(self):
+        """Starts serve_until_stopped roop as a daemon thread."""
         self.__shutdown= False
         self.server_thread = threading.Thread(target=self.serve_until_stopped,daemon=True)
         self.server_thread.start()
         self.logger.info("About starting Logging Server...")
 
     def shutdown(self):
+        """Stops serve_until_stopped roop."""
         self.__shutdown = True
         self.logger.info("Shutdown Logging Server...")
 
