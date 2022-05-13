@@ -70,7 +70,15 @@ class LoggingServer(socketserver.ThreadingTCPServer):
             self.logger_modifier = func
         else:
             raise ValueError("logger modifier must be callable! input: {}".format(func))
-        
+
+    def __enter__(self):
+        """Starts server."""
+        self.start()
+
+    def __exit__(self, exc_type,exc_val,exc_tb) -> None:
+        """Shutdown server"""   
+        self.shutdown()
+                
 
 
         
