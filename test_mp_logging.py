@@ -4,7 +4,6 @@ import multiprocessing as mp
 import sys
 import logging
 import time
-from logging import _lock
 
 outer_logger = SocketLogger("outer_logger")
 
@@ -17,10 +16,10 @@ def test_multiprocessing_logging():
     ls = LoggingServer()
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(0)
-    ls.logger.addHandler(sh)
-    ls.logger.setLevel(0)
+    logger = logging.getLogger()
+    logger.addHandler(sh)
+    logger.setLevel(0)
     ls.start()
-    #outer_logger = SocketLogger("outer_logger",0)
     outer_logger.info("start test.")
     time.sleep(0.5)
     with mp.Pool() as p:
@@ -28,7 +27,7 @@ def test_multiprocessing_logging():
         p.map(process_func, nums)
 
     outer_logger.info("end test.")
-    #ls.shutdown()
+    ls.shutdown()
         
 
 if __name__ == "__main__":
