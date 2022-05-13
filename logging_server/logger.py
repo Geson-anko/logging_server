@@ -25,6 +25,7 @@ def _check_pid(func):
     def check(self,*args, **kwds):
         pid = os.getpid()
         if self._pid != pid:
+            
             self._pid = pid
             self.reset_logger()
         func(self,*args, **kwds)
@@ -52,7 +53,7 @@ class SocketLogger:
 
     def set_logger(self):
         """set logger class, name, level and socket handler."""
-        self.__logger = logging.Logger(self.name)
+        self.__logger = logging.getLogger(self.name)
         self.__logger.setLevel(self.level)
         socket_handler = logging.handlers.SocketHandler(self.host, self.port)
         socket_handler.setLevel(logging.NOTSET)
