@@ -38,3 +38,7 @@ def test_is_shutdown():
     ls.shutdown()
     assert ls.is_shutdown == True
 
+def test_with_statement():
+    with ls:
+        assert ls.is_shutdown == False
+    assert ls.is_shutdown == True
