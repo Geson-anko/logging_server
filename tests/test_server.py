@@ -2,7 +2,7 @@ from logging_server.server import LoggingServer
 import logging
 import sys
 import time
-ls = LoggingServer(port=8316)
+ls = LoggingServer(port=10003)
 def test_init():
     assert ls.is_shutdown == True
     assert ls.timeout == 1

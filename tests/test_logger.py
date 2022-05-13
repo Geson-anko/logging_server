@@ -5,13 +5,14 @@ import sys
 import time
 import logging
 
-ls = LoggingServer()
+PORT = 10001
+ls = LoggingServer(port=PORT)
 ls.start()
 
 def _test_logging():
     #print(msg)
     #print("start test logging")
-    logger = SocketLogger("test_logging")
+    logger = SocketLogger("test_logging",port=PORT)
     logger.debug("debug")
     logger.info("info")
     logger.warning("warning")

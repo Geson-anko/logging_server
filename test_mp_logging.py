@@ -5,15 +5,16 @@ import sys
 import logging
 import time
 
-outer_logger = SocketLogger("outer_logger")
+PORT = 10005
+outer_logger = SocketLogger("outer_logger",port=PORT)
 
 def process_func(num:int) -> None:
     outer_logger.info("Logging after process")
-    logger = SocketLogger(f"process{num}")
+    logger = SocketLogger(f"process{num}",port=PORT)
     logger.info(f"logged from process{num}")
 
 def test_multiprocessing_logging():
-    ls = LoggingServer()
+    ls = LoggingServer(port=PORT)
     sh = logging.StreamHandler(sys.stdout)
     sh.setLevel(0)
     logger = logging.getLogger()

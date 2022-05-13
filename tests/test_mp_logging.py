@@ -9,14 +9,14 @@ import time
 #sh = logging.StreamHandler(sys.stdout)
 #root.addHandler(sh)
 #root.setLevel(0)
-
+PORT = 10002
 NUM_PROCESSES = 3
 def process_func(num:int) -> None:
-    logger = SocketLogger(f"process{num}")
+    logger = SocketLogger(f"process{num}",port=PORT)
     logger.info(f"logged from process{num}")
 
 def _mp_logging():
-    ls = LoggingServer() # save multiple calling.
+    ls = LoggingServer(port=PORT) # save multiple calling.
     ls.start()
     
     with mp.Pool() as p:
