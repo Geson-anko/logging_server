@@ -20,7 +20,7 @@ def process(process_name:str) -> None:
 
 if __name__ == "__main__":
     import multiprocessing as mp
-    
+
     logger = logging.getLogger() # root logger
     logger.addHandler(logging.StreamHandler(sys.stdout)) # output to console.
     logger.setLevel(logging.NOTSET) # lowest logger level
@@ -45,7 +45,7 @@ def process(process_name:str) -> None:
 
 if __name__ == "__main__":
     import multiprocessing as mp
-    
+
     logger = logging.getLogger() # root logger
     logger.addHandler(logging.StreamHandler(sys.stdout)) # output to console.
     logger.setLevel(logging.NOTSET) # lowest logger level
@@ -69,10 +69,10 @@ The logging server must be protected with `if __name__ == "__main__":`
 ```py
 if __name__ == "__main__":
     ls = LoggingServer(host="localhost", port=9999)
-    ls.start() # Server runs in daemon thread. 
+    ls.start() # Server runs in daemon thread.
 ```
 
-- Shutdown server    
+- Shutdown server
 You don't need to call this method at the end of the script because logging server runs in daemon thread.
 ```py
 ...
@@ -80,8 +80,8 @@ ls.shutdown()
 ...
 ```
 
-- Socket Logger  
-It is an incomplete `logging.Logger` wrapper that does not inherit.  
+- Socket Logger
+It is an incomplete `logging.Logger` wrapper that does not inherit.
 SocketLogger provides some methods to send logs to server.
 ```py
 # host and port are the same as server.
@@ -112,7 +112,23 @@ if __name__ == "__main__":
 ```
 
 
-
-
-
-
+# Logging Structure
+                     ┌───────────┐
+                     │Root Logger│
+                     └───────────┘
+                           ▲
+                           │
+                           │
+                       Propagate
+                           │
+        ┌──────────────────┴──────────────────┐
+        │Logging Server (Threading TCP Server)│
+        └─────────────────────────────────────┘
+           ▲               ▲               ▲
+           │               │               │
+           │               │               │
+         Send            Send            Send
+           │               │               │
+    ┌──────┴──────┐ ┌──────┴──────┐ ┌──────┴──────┐
+    │Socket Logger│ │Socket Logger│ │Socket Logger│
+    └─────────────┘ └─────────────┘ └─────────────┘
