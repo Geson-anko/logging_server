@@ -6,7 +6,7 @@ ls = LoggingServer(port=8316)
 def test_init():
     assert ls.is_shutdown == True
     assert ls.timeout == 1
-    assert ls.logname is None
+    assert ls.logname == "logging_server.server"
 
 def test_is_shutdown():
     ls.start()
