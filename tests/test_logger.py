@@ -4,10 +4,20 @@ import logging
 import sys
 import time
 import logging
+import os
 
 PORT = 10001
 ls = LoggingServer(port=PORT)
 ls.start()
+
+def test__init__():
+    logger = SocketLogger("socketlogger", logging.ERROR, "127.0.0.1", 10001)
+    
+    assert logger._pid == os.getpid()
+    assert logger.name == "socketlogger"
+    assert logger.level == logging.ERROR
+    assert logger.host == "127.0.0.1"
+    assert logger.port == 10001
 
 def _test_logging():
     #print(msg)
