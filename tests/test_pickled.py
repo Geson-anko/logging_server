@@ -4,10 +4,10 @@ import sys, logging
 import time
 from logging import INFO
 
-root = logging.getLogger()
-sh = logging.StreamHandler(sys.stdout)
-root.addHandler(sh)
-root.setLevel(0)
+#root = logging.getLogger()
+#sh = logging.StreamHandler(sys.stdout)
+#root.addHandler(sh)
+#root.setLevel(0)
 
 PORT = 10004
 NUM_PROCESSES = 3
