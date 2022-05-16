@@ -19,6 +19,12 @@ def test__init__():
     assert logger.host == "127.0.0.1"
     assert logger.port == 10001
 
+def test__reduce__():
+    logger = SocketLogger("__reduce__")
+    logger.__reduce__()
+    assert logger.logger is None
+    
+
 def _test_logging():
     #print(msg)
     #print("start test logging")
