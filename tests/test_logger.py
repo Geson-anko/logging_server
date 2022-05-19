@@ -26,7 +26,7 @@ def _test_logging():
 def test_logging(caplog):
     caplog.set_level(0)
     _test_logging()
-    time.sleep(0.01)
+    time.sleep(0.1)
     d,i,w,e,c,exc = caplog.records
     assert d.levelname == "DEBUG"
     assert d.msg == "debug"

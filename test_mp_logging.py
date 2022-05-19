@@ -25,8 +25,8 @@ def test_multiprocessing_logging():
     time.sleep(0.5)
     with mp.Pool() as p:
         nums = [*range(3)]
-        p.map(process_func, nums)
-
+        out = p.map(process_func, nums)
+    time.sleep(2)
     outer_logger.info("end test.")
     ls.shutdown()
         
