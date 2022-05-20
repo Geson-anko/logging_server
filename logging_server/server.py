@@ -6,7 +6,7 @@ Basic usage:
     >>> ls.logger.addHandler(sh)
     >>> ls.start() # run server in other thread.
     >>> # your process
-    ...
+    ... 
     >>> # end process
     >>> # Server thread is deamon, so you don't need call `ls.shutdown()`
     >>> ls.shutdown() # If you need. `del ls` is same.
@@ -15,38 +15,29 @@ Basic usage:
     >>> ls = LoggingServer(host="127.0.0.1", port=9999)
 """
 
+from .handlers import LogRecordStreamHandler
+import socketserver
 import logging
 import logging.handlers
-import socketserver
 import threading
 from typing import *
-
-from .handlers import LogRecordStreamHandler
-
-
 class LoggingServer(socketserver.ThreadingTCPServer):
     """The SocketServer which receive Logs."""
 
     allow_reuse_address = True
     daemon_threads = True
 
-    def __init__(
-        self,
-        host="localhost",
-        port=logging.handlers.DEFAULT_TCP_LOGGING_PORT,
-        handler=LogRecordStreamHandler,
-        logger_name: str = __name__,
-    ):
+    def __init__(self,host='localhost',port=logging.handlers.DEFAULT_TCP_LOGGING_PORT, 
+                handler=LogRecordStreamHandler, logger_name:str=__name__):
         super().__init__((host, port), handler)
         self.timeout = 1
         self.logname = logger_name
         self.logger = logging.getLogger(logger_name)
         self.__shutdown = True
-        self.server_thread: Optional[threading.Thread] = None
+        self.server_thread:threading.Thread = None
 
     def serve_until_stopped(self):
         import select
-
         while not self.__shutdown:
             rd, wr, ex = select.select([self.socket.fileno()], [], [], self.timeout)
             if rd:
@@ -56,8 +47,8 @@ class LoggingServer(socketserver.ThreadingTCPServer):
 
     def start(self):
         """Starts serve_until_stopped roop as a daemon thread."""
-        self.__shutdown = False
-        self.server_thread = threading.Thread(target=self.serve_until_stopped, daemon=True)
+        self.__shutdown= False
+        self.server_thread = threading.Thread(target=self.serve_until_stopped,daemon=True)
         self.server_thread.start()
         self.logger.info("About starting Logging Server...")
 
@@ -69,11 +60,15 @@ class LoggingServer(socketserver.ThreadingTCPServer):
     @property
     def is_shutdown(self) -> bool:
         return self.__shutdown
-
+        
     def __enter__(self):
         """Starts server."""
         self.start()
 
-    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Shutdown server"""
+    def __exit__(self, exc_type,exc_val,exc_tb) -> None:
+        """Shutdown server"""   
         self.shutdown()
+                
+
+
+        
