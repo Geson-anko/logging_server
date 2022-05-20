@@ -26,7 +26,7 @@ def pickled_logging():
     for i in range(NUM_PROCESSES):
         p = mp.Process(target=Log(i),)
         p.start()
-    time.sleep(2)
+    time.sleep(0.1)
 
 def test_process_logging(caplog):
     pickled_logging()
