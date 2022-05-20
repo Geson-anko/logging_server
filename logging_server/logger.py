@@ -20,12 +20,15 @@ Usage:
 import os
 import logging
 import logging.handlers
+from typing import *
 
 def _check_pid(func):
     def check(self,*args, **kwds):
+        if self.logger is None:
+            self.set_logger()
+
         pid = os.getpid()
         if self._pid != pid:
-            
             self._pid = pid
             self.reset_logger()
         func(self,*args, **kwds)
@@ -53,7 +56,7 @@ class SocketLogger:
 
     def set_logger(self):
         """set logger class, name, level and socket handler."""
-        self.__logger = logging.getLogger(self.name)
+        self.__logger = logging.Logger(self.name)
         self.__logger.setLevel(self.level)
         socket_handler = logging.handlers.SocketHandler(self.host, self.port)
         socket_handler.setLevel(logging.NOTSET)
@@ -69,6 +72,14 @@ class SocketLogger:
         """reset logger class"""
         self.remove_handlers()
         self.set_logger()
+
+    def __reduce__(self):
+        """
+        Picking helper method.
+        Removes internal Logger class because it is not picklable.
+        """
+        self.__logger = None
+        return super().__reduce__()
 
     @_check_pid
     def debug(self,*args, **kwds) -> None: self.logger.debug(*args, **kwds)
