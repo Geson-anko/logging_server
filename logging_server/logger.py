@@ -17,13 +17,14 @@ Usage:
 ロギングに必要なメソッドのみを提供します。
 また任意のハンドラーを追加しても正常に機能しないことがあります。
 """
-import os
 import logging
 import logging.handlers
+import os
 from typing import *
 
+
 def _check_pid(func):
-    def check(self,*args, **kwds):
+    def check(self, *args, **kwds):
         if self.logger is None:
             self.set_logger()
 
@@ -31,14 +32,21 @@ def _check_pid(func):
         if self._pid != pid:
             self._pid = pid
             self.reset_logger()
-        func(self,*args, **kwds)
+        func(self, *args, **kwds)
+
     return check
+
+
 class SocketLogger:
-    _pid:int = None
-    __logger:logging.Logger = None
+    _pid: Optional[int] = None
+    __logger: Optional[logging.Logger] = None
+
     def __init__(
-        self, name:str, level:int=logging.NOTSET, host="localhost",
-        port:int=logging.handlers.DEFAULT_TCP_LOGGING_PORT,
+        self,
+        name: str,
+        level: int = logging.NOTSET,
+        host="localhost",
+        port: int = logging.handlers.DEFAULT_TCP_LOGGING_PORT,
     ) -> None:
         self._pid = os.getpid()
         self.name = name
@@ -51,7 +59,7 @@ class SocketLogger:
     def logger(self):
         return self.__logger
 
-    def setLevel(self, level:int) -> None:
+    def setLevel(self, level: int) -> None:
         self.logger.setLevel(level)
 
     def set_logger(self):
@@ -61,7 +69,7 @@ class SocketLogger:
         socket_handler = logging.handlers.SocketHandler(self.host, self.port)
         socket_handler.setLevel(logging.NOTSET)
         self.__logger.addHandler(socket_handler)
-        self.__logger.propagate=False # Because another logger is propagating in server process.
+        self.__logger.propagate = False  # Because another logger is propagating in server process.
 
     def remove_handlers(self):
         """remove handlers of logger."""
@@ -82,21 +90,33 @@ class SocketLogger:
         return super().__reduce__()
 
     @_check_pid
-    def debug(self,*args, **kwds) -> None: self.logger.debug(*args, **kwds)
-    @_check_pid
-    def info(self,*args, **kwds) -> None: self.logger.info(*args, **kwds)
-    @_check_pid
-    def warn(self,*args, **kwds) -> None: self.logger.warn(*args, **kwds)
-    @_check_pid
-    def warning(self,*args, **kwds) -> None: self.logger.warning(*args, **kwds)
-    @_check_pid
-    def error(self,*args, **kwds) -> None: self.logger.error(*args, **kwds)
-    @_check_pid
-    def critical(self,*args, **kwds) -> None: self.logger.critical(*args, **kwds)
-    @_check_pid
-    def exception(self,*args, **kwds) -> None: self.logger.exception(*args, **kwds)
-    @_check_pid
-    def log(self, *args,**kwds) -> None: self.logger.log(*args,**kwds)
+    def debug(self, *args, **kwds) -> None:
+        self.logger.debug(*args, **kwds)
 
+    @_check_pid
+    def info(self, *args, **kwds) -> None:
+        self.logger.info(*args, **kwds)
 
+    @_check_pid
+    def warn(self, *args, **kwds) -> None:
+        self.logger.warn(*args, **kwds)
 
+    @_check_pid
+    def warning(self, *args, **kwds) -> None:
+        self.logger.warning(*args, **kwds)
+
+    @_check_pid
+    def error(self, *args, **kwds) -> None:
+        self.logger.error(*args, **kwds)
+
+    @_check_pid
+    def critical(self, *args, **kwds) -> None:
+        self.logger.critical(*args, **kwds)
+
+    @_check_pid
+    def exception(self, *args, **kwds) -> None:
+        self.logger.exception(*args, **kwds)
+
+    @_check_pid
+    def log(self, *args, **kwds) -> None:
+        self.logger.log(*args, **kwds)

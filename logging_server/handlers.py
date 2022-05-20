@@ -1,9 +1,8 @@
-import logging
-import pickle
 import socketserver
 import struct
+import logging
+import pickle
 from typing import *
-
 
 class LogRecordStreamHandler(socketserver.StreamRequestHandler):
     """Read the LogRecord binary and process it."""
@@ -14,7 +13,7 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
             chunk = self.connection.recv(4)
             if len(chunk) < 4:
                 break
-            slen = struct.unpack(">L", chunk)[0]
+            slen = struct.unpack(">L",chunk)[0]
             chunk = self.connection.recv(slen)
             while len(chunk) < slen:
                 chunk = chunk + self.connection.recv(slen - len(chunk))
@@ -22,10 +21,10 @@ class LogRecordStreamHandler(socketserver.StreamRequestHandler):
             record = logging.makeLogRecord(obj)
             self.handleLogRecord(record)
 
-    def unPickle(self, data: bytes) -> Any:
+    def unPickle(self, data:bytes) -> Any:
         return pickle.loads(data)
-
-    def handleLogRecord(self, record: logging.LogRecord) -> None:
-        """process the LogRecord object."""
+    
+    def handleLogRecord(self, record:logging.LogRecord) -> None:
+        """ process the LogRecord object."""
         logger = logging.getLogger()
         logger.handle(record)
