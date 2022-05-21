@@ -38,7 +38,22 @@ if __name__ == "__main__":
         p = mp.Process(target=process, args=(f"process {i}",))
         p.start()
 ```
+- console output
 
+```
+About starting Logging Server...
+start processes.
+Start process 3
+Start process 4
+Start process 1
+Start process 2
+Start process 9
+Start process 7
+Start process 0
+Start process 6
+Start process 5
+Start process 8
+```
 ### Bad
 ```py
 from logging_server import LoggingServer, SocketLogger
@@ -63,7 +78,11 @@ if __name__ == "__main__":
         p = mp.Process(target=process, args=(f"process {i}",))
         p.start()
 ```
-
+- console output
+```
+About starting Logging Server...
+start processes.
+```
 # Usage
 - Import server and logger
 ```py
