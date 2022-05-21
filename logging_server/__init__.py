@@ -1,3 +1,4 @@
-from .server import LoggingServer
 from .logger import SocketLogger
-__version__ = '1.0.1'
+from .server import LoggingServer
+
+__version__ = "1.0.1"
